@@ -27,7 +27,7 @@ void BFS(node *start){
         }
     }
     visited_nodes.pop();
-    if (visited_nodes.front()!=NULL)
+    if (!visited_nodes.empty())
         BFS(visited_nodes.front());
 }
 
