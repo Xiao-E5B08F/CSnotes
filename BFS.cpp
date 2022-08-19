@@ -1,29 +1,39 @@
 #include <iostream>
 #include <vector>
+#include <queue>
 using std::cout, std::cin, std::ios_base;
 
 #define IO_optimization ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 #define endl '\n';
-struct node {
+struct node{
     char name;
-    std::vector <node *> neighbors;
-    bool visited = false;   // true means visited, otherwise false.
+    std::vector<node *> neighbors;
+    bool visited = false; // true means visited, otherwise false.
 };
 
-std::vector<node *> visited_nodes;
+std::queue<node *> visited_nodes;
 
-void DFS(node *start){
-    cout << start -> name << " ";
-    start -> visited = true;
-    visited_nodes.push_back(start);
-    for (int i = 0; i < start -> neighbors.size(); i++){
-        if (!start -> neighbors[i] -> visited)
-            DFS(start -> neighbors[i]);            
+void BFS(node *start){
+    if(!start->visited){
+        cout << start->name << " ";
+        visited_nodes.push(start);
+        start->visited = true;
     }
+    for (int i = 0; i < start-> neighbors.size(); i++){
+        if (!start->neighbors[i]->visited){
+            cout << start->neighbors[i]->name << " ";
+            start->neighbors[i]->visited = true;
+            visited_nodes.push(start->neighbors[i]);
+        }
+    }
+    visited_nodes.pop();
+    if (visited_nodes.front()!=NULL)
+        BFS(visited_nodes.front());
 }
+
 int main(void){
     IO_optimization
-    std::vector <node*> graph;
+    std::vector<node *> graph;
     graph.resize(7);
     char name = 'A';
     for (int i = 0; i < 7; i++){
@@ -55,12 +65,12 @@ int main(void){
     // G:
     graph[6]->neighbors.push_back(graph[3]);
     graph[6]->neighbors.push_back(graph[5]);
-    
-    DFS(graph[0]);
+
+    BFS(graph[0]);
     return 0;
 }
 
 /*
 A B C D E F G
-0 1 2 3 4 5 6 
+0 1 2 3 4 5 6
 */
