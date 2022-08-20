@@ -7,21 +7,24 @@ using std::cout, std::cin, std::ios_base;
 #define endl '\n';
 struct node {
     char name;
-    std::vector<node *> neighbors; // Sort by dictionary order
-    bool visited = false;   // true means visited, otherwise false.
+    std::vector<node *> neighbors; // Sort by dictionary order.
+    bool visited = false;   // True means visited, otherwise false.
 };
 
-std::stack<node *> path; // The path from A to G.
+std::stack<node *> path;
 
 void DFS(node *start){
+    // Print out the information about the node and mark it as visited.
     cout << start->name << " " ; 
     path.push(start);
-    start->visited = true; 
-    for (int i = 0; i < start -> neighbors.size(); i++){
+    start->visited = true;
+    // Make all the neighbors to do DFS.
+    for (int i = 0; i < start -> neighbors.size(); i++){  
         if (!start -> neighbors[i] -> visited)
             DFS(start -> neighbors[i]);            
     }
-    path.pop();
+    // Back to the previous node.
+    path.pop(); 
 }
 
 int main(void){
@@ -29,10 +32,12 @@ int main(void){
     std::vector <node*> graph;
     graph.resize(7);
     char name = 'A';
-    for (int i = 0; i < 7; i++){
+    // Initialize the every node in the graph
+    for (int i = 0; i < 7; i++){ 
         graph[i] = new node;
         graph[i]->name = name + i;
     }
+    // The code below is about the link between the nodes 
     // A:
     graph[0]->neighbors.push_back(graph[1]);
     graph[0]->neighbors.push_back(graph[2]);
@@ -60,18 +65,6 @@ int main(void){
     graph[6]->neighbors.push_back(graph[5]);
     
     DFS(graph[0]);
-    /*
-    std::stack<node *> reverse;
-    while(!path.empty()){
-        reverse.push(path.top());
-        path.pop();
-    }
-    while (!reverse.empty()){
-        cout << reverse.top()->name;
-        reverse.pop();
-        if (!reverse.empty())
-            cout << " -> ";
-    }*/
     
     return 0;
 }

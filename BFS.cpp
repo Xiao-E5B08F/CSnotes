@@ -7,28 +7,32 @@ using std::cout, std::cin, std::ios_base;
 #define endl '\n';
 struct node{
     char name;
-    std::vector<node *> neighbors;
-    bool visited = false; // true means visited, otherwise false.
+    std::vector<node *> neighbors; // Sort by dictionary order
+    bool visited = false;          // True means visited, otherwise false.
 };
 
-std::queue<node *> visited_nodes;
+std::queue<node *> path;
 
 void BFS(node *start){
-    if(!start->visited){
+    // Only the really first node will pass this if .
+    // You can also do it before you do BFS and make the BFS clean. 
+    if(!start->visited){   
         cout << start->name << " ";
-        visited_nodes.push(start);
+        path.push(start);
         start->visited = true;
     }
-    for (int i = 0; i < start-> neighbors.size(); i++){
-        if (!start->neighbors[i]->visited){
+    // Print out the information about the all neighbors and mark it as visited.
+    for (int i = 0; i < start-> neighbors.size(); i++){  
+        if (!start->neighbors[i]->visited){         
             cout << start->neighbors[i]->name << " ";
             start->neighbors[i]->visited = true;
-            visited_nodes.push(start->neighbors[i]);
+            path.push(start->neighbors[i]);
         }
     }
-    visited_nodes.pop();
-    if (!visited_nodes.empty())
-        BFS(visited_nodes.front());
+    // Remove the oldeset node.
+    path.pop(); 
+    if (!path.empty())  
+        BFS(path.front());  
 }
 
 int main(void){
@@ -36,10 +40,11 @@ int main(void){
     std::vector<node *> graph;
     graph.resize(7);
     char name = 'A';
-    for (int i = 0; i < 7; i++){
+    for (int i = 0; i < 7; i++){ // Initialize the every node in the graph
         graph[i] = new node;
         graph[i]->name = name + i;
     }
+    // The code below is about the link between the nodes
     // A:
     graph[0]->neighbors.push_back(graph[1]);
     graph[0]->neighbors.push_back(graph[2]);
