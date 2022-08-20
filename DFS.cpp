@@ -1,26 +1,29 @@
 #include <iostream>
 #include <vector>
+#include <stack>
 using std::cout, std::cin, std::ios_base;
 
 #define IO_optimization ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 #define endl '\n';
 struct node {
     char name;
-    std::vector <node *> neighbors;
+    std::vector<node *> neighbors; // Sort by dictionary order
     bool visited = false;   // true means visited, otherwise false.
 };
 
-std::vector<node *> visited_nodes;
+std::stack<node *> path; // The path from A to G.
 
 void DFS(node *start){
-    cout << start -> name << " ";
-    start -> visited = true;
-    visited_nodes.push_back(start);
+    cout << start->name << " " ; 
+    path.push(start);
+    start->visited = true; 
     for (int i = 0; i < start -> neighbors.size(); i++){
         if (!start -> neighbors[i] -> visited)
             DFS(start -> neighbors[i]);            
     }
+    path.pop();
 }
+
 int main(void){
     IO_optimization
     std::vector <node*> graph;
@@ -57,6 +60,19 @@ int main(void){
     graph[6]->neighbors.push_back(graph[5]);
     
     DFS(graph[0]);
+    /*
+    std::stack<node *> reverse;
+    while(!path.empty()){
+        reverse.push(path.top());
+        path.pop();
+    }
+    while (!reverse.empty()){
+        cout << reverse.top()->name;
+        reverse.pop();
+        if (!reverse.empty())
+            cout << " -> ";
+    }*/
+    
     return 0;
 }
 
